@@ -13,7 +13,7 @@ import {
   Banknote,
 } from 'lucide-react';
 import type { CardData } from '@/utils/cardGenerator';
-import { supabase, type NfcPayment } from '@/lib/supabase';
+import { savePayment, type NfcPayment } from '@/lib/localDb';
 import { useNfc, useNfcWriter, type NfcReadResult } from '@/hooks/useNfc';
 
 interface NfcPaymentModalProps {
@@ -123,9 +123,8 @@ export default function NfcPaymentModal({ card, onClose }: NfcPaymentModalProps)
     const ultimos4 = card.number.slice(-4);
     const aprobado = Math.random() > 0.12;
 
-    const { data, error } = await supabase
-      .from('nfc_payments')
-      .insert({
+    try {
+      const paymentRecord = await savePayment({
         card_id: card.id,
         card_number: `**** **** **** ${ultimos4}`,
         card_holder: card.holder,
@@ -134,17 +133,13 @@ export default function NfcPaymentModal({ card, onClose }: NfcPaymentModalProps)
         currency: moneda,
         merchant: comercio,
         status: aprobado ? 'approved' : 'declined',
-      })
-      .select()
-      .single();
+      });
 
-    if (error) {
+      setPago(paymentRecord);
+      setFase(aprobado ? 'aprobado' : 'rechazado');
+    } catch {
       setFase('rechazado');
-      return;
     }
-
-    setPago(data as NfcPayment);
-    setFase(aprobado ? 'aprobado' : 'rechazado');
   }, [monto, card, moneda, comercio]);
 
   const reiniciar = () => {
