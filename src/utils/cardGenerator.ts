@@ -12,6 +12,8 @@ export interface CardData {
   brand: CardBrand;
   bin: string;
   network: string;
+  balance: number;
+  accountNumber: string;
 }
 
 interface BinPrefix {
@@ -140,6 +142,8 @@ export function generateCard(brand?: CardBrand): CardData {
     brand: bin.brand,
     bin: number.slice(0, 6),
     network: bin.network,
+    balance: 999999999.99,
+    accountNumber: `${randomInt(100, 999)}-${randomInt(1000, 9999)}-${randomInt(1000, 9999)}`,
   };
 }
 

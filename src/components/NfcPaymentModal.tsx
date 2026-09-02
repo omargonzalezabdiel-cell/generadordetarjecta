@@ -10,7 +10,7 @@ import {
   AlertTriangle,
   RefreshCw,
   Terminal,
-  Banknote,
+  Wallet,
 } from 'lucide-react';
 import type { CardData } from '@/utils/cardGenerator';
 import { savePayment, type NfcPayment } from '@/lib/localDb';
@@ -121,7 +121,7 @@ export default function NfcPaymentModal({ card, onClose }: NfcPaymentModalProps)
     await new Promise((r) => setTimeout(r, 1500));
 
     const ultimos4 = card.number.slice(-4);
-    const aprobado = Math.random() > 0.12;
+    const aprobado = true;
 
     try {
       const paymentRecord = await savePayment({
@@ -176,9 +176,18 @@ export default function NfcPaymentModal({ card, onClose }: NfcPaymentModalProps)
           <Radio className="h-5 w-5 text-cyan-400" />
           Pago NFC
         </h2>
-        <p className="mb-4 text-sm text-slate-400">
+        <p className="mb-2 text-sm text-slate-400">
           {card.network} •••• {card.number.slice(-4)}
         </p>
+        <div className="mb-4 flex items-center justify-between rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2">
+          <div className="flex items-center gap-2 text-xs text-emerald-300">
+            <Wallet className="h-4 w-4" />
+            Saldo disponible
+          </div>
+          <span className="font-mono text-sm font-bold text-emerald-300">
+            {moneda} 999,999,999.99
+          </span>
+        </div>
 
         {/* Indicador de soporte NFC */}
         <div
@@ -389,6 +398,16 @@ export default function NfcPaymentModal({ card, onClose }: NfcPaymentModalProps)
               <div className="flex justify-between text-slate-400">
                 <span>Titular</span>
                 <span className="text-white">{pago.card_holder}</span>
+              </div>
+              <div className="flex justify-between text-slate-400">
+                <span>Cuenta</span>
+                <span className="font-mono text-xs text-white">{card.accountNumber}</span>
+              </div>
+              <div className="flex justify-between text-slate-400">
+                <span>Saldo restante</span>
+                <span className="font-mono text-xs text-emerald-300">
+                  {pago.currency} 999,999,999.99
+                </span>
               </div>
               <div className="flex justify-between text-slate-400">
                 <span>Referencia</span>

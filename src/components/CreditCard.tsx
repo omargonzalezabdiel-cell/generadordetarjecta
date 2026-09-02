@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Copy, Check, Wifi, Radio } from 'lucide-react';
+import { Copy, Check, Wifi, Radio, Wallet } from 'lucide-react';
 import type { CardData } from '@/utils/cardGenerator';
 import NfcPaymentModal from './NfcPaymentModal';
 
@@ -118,12 +118,16 @@ export default function CreditCard({ card, index }: CreditCardProps) {
                   </p>
                   <p className="text-sm font-medium text-white">{card.holder}</p>
                 </div>
-                <div>
+                <div className="text-right">
                   <p className="text-[9px] uppercase tracking-wider text-white/60">
                     Vence
                   </p>
                   <p className="font-mono text-sm text-white">{card.expiry}</p>
                 </div>
+              </div>
+              <div className="flex items-center gap-1.5 rounded-md bg-black/20 px-2 py-1">
+                <Wallet className="h-3 w-3 text-emerald-300" />
+                <span className="text-[10px] font-medium text-emerald-200">Saldo ilimitado</span>
               </div>
             </div>
           </div>
@@ -177,6 +181,16 @@ export default function CreditCard({ card, index }: CreditCardProps) {
         <div className="grid grid-cols-2 gap-2">
           <CopyField label="BIN" value={card.bin} />
           <CopyField label="Red" value={card.network} />
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          <CopyField label="Cuenta" value={card.accountNumber} />
+          <div className="flex items-center justify-between rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-3 py-2">
+            <div>
+              <p className="text-[10px] uppercase tracking-wider text-slate-400">Saldo</p>
+              <p className="font-mono text-sm font-bold text-emerald-400">Ilimitado</p>
+            </div>
+            <Wallet className="h-4 w-4 text-emerald-400" />
+          </div>
         </div>
       </div>
 
